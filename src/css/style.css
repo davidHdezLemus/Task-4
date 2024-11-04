@@ -12,29 +12,10 @@
   --white-color: #fff;
   --margin-color: #ecf0f1;
   --text-color: #fff;
-  --error-color: #e74c3c;
-  --success-color: #2ecc71;
   --black-bg-color: #d5d8dc;
   --white-bg-color: #abb2b9;
   --asside_section-color: lightgoldenrodyellow;
-}
-
-.title-section {
-  padding: 0 0 20px 0;
-}
-
-.slider-container {
-  padding: 20px 0;
-  background: var(--asside_section-color)
-}
-
-.color-section {
-  padding: 20px 0;
-}
-
-.images-section {
-  padding: 20px 0 0 0;
-  background: var(--asside_section-color)
+  --font_pokemon: 'pokemon solid';
 }
 
 body {
@@ -42,12 +23,14 @@ body {
   background-color: var(--margin-color);
   min-height: 100vh;
   color: var(--primary-color);
+  overflow-x: hidden;
 }
 
 .container {
   display: flex;
   padding: 20px;
-  height: 660px;
+  height: 646px;
+  max-width: 100%;
 }
 
 .options-panel {
@@ -61,13 +44,15 @@ body {
 }
 
 .images-section {
+  padding: 20px 0 0 0;
+  background: var(--asside_section-color);
   border-bottom: none;
 }
 
 h3 {
   color: var(--primary-color);
   font-size: 1.2em;
-  background: var(--asside_section-color)
+  background: var(--asside_section-color);
 }
 
 /* Title Input Styles */
@@ -78,7 +63,7 @@ h3 {
   border-radius: 4px;
   font-size: 1em;
   transition: border-color 0.3s;
-  background: var(--asside_section-color)
+  background: var(--asside_section-color);
 }
 
 #title-input:focus {
@@ -90,6 +75,8 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  padding: 20px 0;
+  background: var(--asside_section-color);
 }
 
 .slider-container label {
@@ -111,7 +98,7 @@ input[type="range"] {
   gap: 20px;
   padding: 20px 0;
   flex-direction: column;
-  background: var(--asside_section-color)
+  background: var(--asside_section-color);
 }
 
 .radio-group label {
@@ -152,7 +139,7 @@ input[type="radio"]:checked::after {
   padding: 6px;
   background: var(--margin-color);
   overflow-y: auto;
-  height: 244px;
+  height: 286px;
 }
 
 #tshirt-base {
@@ -183,11 +170,6 @@ input[type="radio"]:checked::after {
   min-height: 50px;
   border: 2px dashed transparent;
   transition: border-color 0.3s;
-}
-
-.dropper-container.drag-over {
-  border-color: var(--accent-color);
-  background-color: rgba(52, 152, 219, 0.1);
 }
 
 /* Preview Section Styles */
@@ -264,7 +246,7 @@ input[type="radio"]:checked::after {
   color: var(--primary-color);
   text-align: center;
   transform: translate(2px, -68px);
-  font-family: 'pokemon solid';
+  font-family: var(--font_pokemon);
   letter-spacing: 6px;
 }
 
@@ -293,17 +275,16 @@ footer h5 {
 
 #title-name {
   transform: translate(25px, -81px);
-  font-family: 'Pokemon Hollow', sans-serif;
 }
 
-#font-pkmn {
-  font-family: 'Pokemon Solid', sans-serif;
-  letter-spacing: 4px;
+.font-pkmn {
+  font-family: var(--font_pokemon), sans-serif;
+  letter-spacing: 6px;
+  font-size: 2rem;
 }
 
-@media (max-width: 820px) {
-
-  #font-pkmn {
+@media (max-width: 860px) {
+  .preview-section>h1 {
     font-size: 1.5rem;
   }
 }
@@ -312,11 +293,12 @@ footer h5 {
   .container {
     flex-direction: column;
     padding: 2px;
+    max-width: 100%;
   }
 
   .options-panel {
     height: 620px;
-    width: 476px;
+    width: 100%;
     max-width: inherit;
     min-width: inherit;
   }
@@ -324,7 +306,7 @@ footer h5 {
   .preview-section {
     margin-top: 8px;
     margin-left: auto;
-    width: 480px;
+    width: 100%;
   }
 
   .images-section {
