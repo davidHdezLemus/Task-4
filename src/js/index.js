@@ -1,16 +1,40 @@
 document.addEventListener("DOMContentLoaded", () => {
   const imageContainer = document.getElementById("draggable-images");
   const basePath = "./src/images/pkmn/";
-  const totalImages = 151; // cantidad total de imágenes
+  const totalImages = 151; // total number of images
+
+  // Load images into the container
   for (let i = 1; i <= totalImages; i++) {
     const image = document.createElement("img");
-    const imageNumber = String(i).padStart(3, '0'); // agrega ceros adelante, por ejemplo, 001, 002, etc.
+    const imageNumber = String(i).padStart(3, '0'); // pad numbers with leading zeros, e.g., 001, 002, etc.
     image.src = `${basePath}${imageNumber}.png`;
     image.alt = `pokemon-${imageNumber}`;
     image.draggable = true;
     image.addEventListener("dragstart", dragElement);
     imageContainer.appendChild(image);
   }
+
+  // Function to update events based on screen width
+  function updateEvents() {
+    const isSmallScreen = window.matchMedia("(max-width: 480px)").matches;
+    if (isSmallScreen) {
+      imageContainer.querySelectorAll("img").forEach(img => {
+        img.removeEventListener("dragstart", dragElement);
+        img.addEventListener("click", clickElement);
+      });
+    } else {
+      imageContainer.querySelectorAll("img").forEach(img => {
+        img.removeEventListener("click", clickElement);
+        img.addEventListener("dragstart", dragElement);
+      });
+    }
+  }
+
+  // Call the function on page load
+  updateEvents();
+
+  // Call the function on window resize
+  window.addEventListener("resize", updateEvents);
 });
 
 const rangeH = document.querySelector("#horizontal-slider");
@@ -28,6 +52,7 @@ const tshirtContainer = document.getElementById("tshirt-container");
 const imageOverlay = document.getElementById("image-overlay");
 const mirrorOverlay = document.getElementById("mirrored-overlay");
 
+// Function to update the T-shirt color based on selected radio button
 function updateTshirtColor() {
   if (blackRadio.checked) {
     tshirtBase.src = "./src/images/tshirt-black.png";
@@ -42,16 +67,19 @@ function updateTshirtColor() {
   }
 }
 
+// Function to update the text on the T-shirt
 function updateText() {
   titleTshirt.textContent = titleInput.value;
 }
 
+// Function to update the position of the text on the T-shirt
 function updateTransform() {
   const translateX = rangeH.value;
   const translateY = rangeV.value;
   titleContainer.style.transform = `translate(${translateX}px, ${translateY}px)`;
 }
 
+// Event listeners for sliders and input fields
 rangeH.addEventListener("input", updateTransform);
 rangeV.addEventListener("input", updateTransform);
 titleInput.addEventListener("input", updateText);
@@ -62,45 +90,57 @@ let currentImage;
 tshirtContainer.addEventListener("drop", dropElement);
 tshirtContainer.addEventListener("dragover", dragoverElement);
 
+// Function to handle drag start event
 function dragElement(event) {
   currentImage = event.target;
   event.dataTransfer.setData("text/plain", event.target.src);
 }
 
-// Selección del contenedor de overlay de imágenes
+// Function to handle click event for images
+function clickElement(event) {
+  const imageSrc = event.target.src;
+  placeImage(imageSrc);
+}
 
+// Function to handle drop event
 function dropElement(event) {
   event.preventDefault();
   const imageSrc = event.dataTransfer.getData("text/plain");
+  placeImage(imageSrc);
+}
 
-  // Extrae solo el nombre del archivo sin la extensión (separa por / y coge la ultima; separa por . y coge lo primero)
+// Function to place the image on the T-shirt
+function placeImage(imageSrc) {
+  // Extract the file name without extension
   const fileName = imageSrc.split('/').pop().split('.').shift();
-  charNameTshirt.textContent = fileName;
+  charNameTshirt.textContent = `#${fileName}`;
 
-  // Limpiar imágenes anteriores en imageOverlay y mirrorOverlay
+  // Clear previous images in imageOverlay and mirrorOverlay
   imageOverlay.innerHTML = '';
   mirrorOverlay.innerHTML = '';
 
-  // Crear la primera instancia de la imagen para imageOverlay
+  // Create the first instance of the image for imageOverlay
   const newImageOverlay = document.createElement("img");
   newImageOverlay.src = imageSrc;
   newImageOverlay.style.position = "absolute";
   newImageOverlay.style.width = "200%";
 
-  // Crear la segunda instancia de la imagen para mirrorOverlay e invertirla
+  // Create the second instance of the image for mirrorOverlay and invert it
   const newImageMirror = document.createElement("img");
   newImageMirror.src = imageSrc;
   newImageMirror.style.position = "absolute";
   newImageMirror.style.width = "100%";
-  newImageMirror.style.transform = "scaleX(-1)"; // Aplica el efecto de espejo horizontal
+  newImageMirror.style.transform = "scaleX(-1)"; // Apply horizontal mirror effect
 
-  // Agregar cada imagen a su contenedor correspondiente
+  // Add each image to its corresponding container
   imageOverlay.appendChild(newImageOverlay);
   mirrorOverlay.appendChild(newImageMirror);
 }
 
+// Function to handle drag over event
 function dragoverElement(event) {
   event.preventDefault();
 }
 
+// Initialize T-shirt color on page load
 updateTshirtColor();
